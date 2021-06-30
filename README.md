@@ -7,7 +7,22 @@ This is a sample bootstrap compose stack, see quick start instructions below.
 * Clone the repository
 * Copy the `.env.example` to `.env`
 * Modify the `.env` as needed
-* Run `docker-compose up -d`
+* Run `./compose up -d`
+
+**Note:** the `compose.sh` is a special wrapper that provides support for
+`docker-compose.yml` extensions. You'll find more information on the extension
+below, but generally it's recommended to use `./compose` instead of `docker-compose`.
+
+The `./compose` is a simple wrapper, so you can pass any arguments to it similarly
+how it could be done with the original `docker-compose`, eg:
+
+```bash
+./compose ps
+./compose up -d
+./compose down
+./compose restart
+# etc
+```
 
 # Composition
 
@@ -53,14 +68,17 @@ and will append it to the bottom of the original `LocalSettings.php` of the cont
 
 # Modifying the `docker-compose.yml`
 
-In order to modify the stack eg. to mount some files, like a logo,
-just use `volumes` section on the `docker-compose.yml` by expanding
-the section using [Compose extends](https://docs.docker.com/compose/extends/),
-eg: to add a custom logo
+The proper way to make modifications or additions to the orignal
+`docker-compose.yml` is to add override-files to the `docker-compose`
+directory, see `logo.yml.example`.
+
+This is based on the [Compose extends](https://docs.docker.com/compose/extends/)
+feature.
+
+For example:
 
 * Create `_resources` directory and put your logo there (`_resources/logo.png`)
-* Create `docker-compose.override.yml` file at root
-* Expand the `web` volumes section by adding the following lines:
+* Create `logo.yml` file inside the `docker-compose` directory with the following contents:
 
 ```yml
 version: '3.1'
@@ -68,10 +86,9 @@ services:
   web:
     volumes:
       - ./_resources/logo.png:/var/www/html/w/logo.png
-
 ```
 
-* And run or re-create the stack via `docker-compose up -d`
+* And run or re-create the stack via `./compose up -d`
 
 ## Upgrading
 

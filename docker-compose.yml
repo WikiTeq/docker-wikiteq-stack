@@ -21,7 +21,6 @@ services:
       - "${PORT:-80}:80"
     links:
       - db
-      - redis
     environment:
       # Use .env file to provide values, see .env.example for details
       - MW_ADMIN_USER=${MW_ADMIN_USER:-admin}
@@ -62,23 +61,3 @@ services:
       - ./_logs/httpd:/var/log/httpd
       - ./_logs/mediawiki:/var/log/mediawiki
       - ./_settings/:/var/www/html/w/_settings
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.13
-    restart: unless-stopped
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - ./_data/elasticsearch:/usr/share/elasticsearch/data
-
-  redis:
-    image: "redis:alpine"
-    restart: unless-stopped
-    volumes:
-      - ./_data/redis:/data

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# The script is a wrapper around `docker-compose` with only
+# difference that it also collects all the override files from
+# the `docker-compose` directory and passes it as `-f` param to
+# the `docker-compose` along with the original arg string
+
+FILES="-f docker-compose.yml"
+
+if [[ -f "docker-compose.override.yml" ]]; then
+  FILES="$FILES -f docker-compose.override.yml"
+fi
+
+for file in ./docker-compose/*.yml
+do
+    if [[ -f $file ]]; then
+        FILES=" $FILES -f $file"
+    fi
+done
+
+docker-compose $FILES "$@"
