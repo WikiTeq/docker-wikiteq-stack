@@ -16,6 +16,7 @@ The stack is composed of the following container:
 - `db` - MySQL, a database backend for MediaWiki.
 - `web` - Apache/MediaWiki container with PHP on the board
 - `redis` - Redis cache
+- `elasticsearch` - ElasticSearch instance
 
 # Configuration
 
