@@ -63,6 +63,28 @@ see `.env.example` for a list of variables
 - `MW_SHOW_EXCEPTION_DETAILS` if `true` (by default) configures [$wgShowExceptionDetails](https://www.mediawiki.org/wiki/Manual:$wgShowExceptionDetails) as true.
 - `PHP_LOG_ERRORS` specifies `log_errors` parameter in `php.ini` file.
 - `PHP_ERROR_REPORTING` specifies `error_reporting` parameter in `php.ini` file. `E_ALL` by default, on production should be changed to `E_ALL & ~E_DEPRECATED & ~E_STRICT`.
+- `MW_ENABLE_SITEMAP_GENERATOR` defines if sitemap generation is enabled or not
+- `MW_SITEMAP_PAUSE_DAYS` if the above is enabled, sets the delys between sitemap regenerations
+- `PHP_UPLOAD_MAX_FILESIZE` sets max upload size
+- `PHP_POST_MAX_SIZE` sets max post size
+- `LOG_FILES_COMPRESS_DELAY` sets logs compression delay in seconds
+- `LOG_FILES_REMOVE_OLDER_THAN_DAYS` sets lifespan for old logs
+- `MW_ENABLE_TRANSCODER` defines if the transcoder service is enabled
+- `MW_JOB_TRANSCODER_PAUSE` sets the transcoder service delay in seconds
+- `MW_ENABLE_JOB_RUNNER` defines if the job runner service is enabled
+- `MW_JOB_RUNNER_PAUSE` sets the job runner service delay in seconds
+- `MW_ENABLE_EMAIL` controls the `$wgEnableEmail`
+- `MW_ENABLE_USER_EMAIL` controls the `$wgEnableUserEmail`
+- `MW_EMERGENCY_CONTACT` controls the `$wgEmergencyContact`
+- `MW_PASSWORD_SENDER` controls the `$wgPasswordSender`
+- `MW_DB_TYPE` controls the `$wgDBtype`
+- `MW_DB_SERVER` controls the `$wgDBserver`
+- `MW_DB_NAME` controls the `$wgDBname`
+- `MW_USE_CACHE_DIRECTORY` controls the `$wgCacheDirectory`, if set to `true` puts `$IP/cache` as a value
+- `MW_SECRET_KEY` controls the `$wgSecretKey`
+- `MW_USE_IMAGE_MAGIC` controls the `$wgUseImageMagick`
+- `MW_LOAD_SKINS` controls the list of extension to enable out of the pre-installed skins list (see below)
+- `MW_LOAD_EXTENSIONS` controls the list of extension to enable out of the pre-installed extensions list (see below)
 
 # Settings
 
