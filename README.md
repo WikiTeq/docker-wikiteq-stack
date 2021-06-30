@@ -163,6 +163,7 @@ the `docker-wikiteq-stack`. For example:
 * `docker-wikiteq-stack-MyWiki/_settings/LocalSettings.php` symlinked to `docker-wikiteq-stack/_settings/LocalSettings.php`
 * `docker-wikiteq-stack-MyWiki/_resources/logo.png` symlinked to `docker-wikiteq-stack/_resources/logo.png`
 * `docker-wikiteq-stack-MyWiki/docker-compose/redis.yml` symlinked to `docker-wikiteq-stack/docker-compose/redis.yml`
+* `docker-wikiteq-stack-MyWiki/.evn` symlinked to `docker-wikiteq-stack/.evn` (if there is a reason to version `.env`)
 
 In result, you'll be able to version your modifications via git keeping the stack files untouched
 and so be able to version the stack separately from your modifications.
