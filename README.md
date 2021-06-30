@@ -48,13 +48,8 @@ see `.env.example` for a list of variables
 
 # Settings
 
-The stack will load all the PHP settings files from the `_settings` directory
-and will append each file to the bottom of the original `LocalSettings.php`
-of the MediaWiki inside the container.
-
-In order to supply the wiki with some custom settings just create a 
-`LocalSettings.php` file inside the `_settings` directory. The file name is
-not important.
+The stack will optionally load a settings file from the `_settings/LocalSettings.php`
+and will append it to the bottom of the original `LocalSettings.php` of the container.
 
 # Modifying the `docker-compose.yml`
 
