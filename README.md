@@ -131,3 +131,35 @@ docker pull ghcr.io/wikiteq/mediawiki:latest
 ./compose exec db /bin/bash -c 'mysqldump --all-databases -uroot -p"$MYSQL_ROOT_PASSWORD" 2>/dev/null | gzip | base64 -w 0' | base64 -d > backup_$(date +"%Y%m%d_%H%M%S").sql.gz
 ./compose exec web /bin/bash -c 'tar -c $MW_VOLUME $MW_HOME/images 2>/dev/null | base64 -w 0' | base64 -d > backup_$(date +"%Y%m%d_%H%M%S").tar
 ```
+
+# Keep it up to date
+
+One of the way to keep the stack up to date and hence separated from your deployment changes
+if to follow the deployment procedure below:
+
+* Clone the stack into, say, `docker-wikiteq-stack`
+* Copy the `.env.example` to `.env` (it's git-ignored)
+* Override compose stack with new files created within `docker-compose` directory (they're git-ignored too)
+* Follow the instructions above to put your custom files like logos or custom extensions into `_resources` directory (which is fully git-ignored)
+* Keep the custom PHP settings files within the `_settings` directory (which is git-ignored too)
+
+With the setup above you should have no issues with updating the stack base like below:
+```bash
+cd docker-wikiteq-stack && git pull
+./compose up -d
+```
+
+The limitation of the approach above is that you can't version your own changes to the stack. To workaround this
+you can try another method like below:
+
+* Clone the stack into, say, `docker-wikiteq-stack`
+* Create new directory for your modifications, say, `docker-wikiteq-stack-MyWiki`
+* Put all your customizations there and symlink all the files to their directories within
+the `docker-wikiteq-stack`. For example:
+
+* `docker-wikiteq-stack-MyWiki/_settings/LocalSettings.php` symlinked to `docker-wikiteq-stack/_settings/LocalSettings.php`
+* `docker-wikiteq-stack-MyWiki/_resources/logo.png` symlinked to `docker-wikiteq-stack/_resources/logo.png`
+* `docker-wikiteq-stack-MyWiki/docker-compose/redis.yml` symlinked to `docker-wikiteq-stack/docker-compose/redis.yml`
+
+In result, you'll be able to version your modifications via git keeping the stack files untouched
+and so be able to version the stack separately from your modifications.
