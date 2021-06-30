@@ -13,3 +13,4 @@ cscope.out
 
 # Contains private data
 /.env
+/docker-compose.override.yml

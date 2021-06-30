@@ -8,3 +8,59 @@ This is a sample bootstrap compose stack, see quick start instructions below.
 * Copy the `.env.example` to `.env`
 * Modify the `.env` as needed
 * Run `docker-compose up -d`
+
+# Composition
+
+The stack is composed of the following container:
+
+- `db` - MySQL, a database backend for MediaWiki.
+- `web` - Apache/MediaWiki container with PHP on the board
+- `redis` - Redis cache
+
+# Configuration
+
+All the configurations must be done via modifying the `.env` file,
+see `.env.example` for a list of variables
+
+## Environment variables
+
+- `MW_SITE_SERVER` configures [$wgServer](https://www.mediawiki.org/wiki/Manual:$wgServer); set this to the server host and include the protocol like `http://my-wiki:8080`
+- `MW_SITE_NAME` configures [$wgSitename](https://www.mediawiki.org/wiki/Manual:$wgSitename)
+- `MW_SITE_LANG` configures [$wgLanguageCode](https://www.mediawiki.org/wiki/Manual:$wgLanguageCode)
+- `MW_DEFAULT_SKIN` configures [$wgDefaultSkin](https://www.mediawiki.org/wiki/Manual:$wgDefaultSkin)
+- `MW_ENABLE_UPLOADS` configures [$wgEnableUploads](https://www.mediawiki.org/wiki/Manual:$wgEnableUploads)
+- `MW_USE_INSTANT_COMMONS` configures [$wgUseInstantCommons](https://www.mediawiki.org/wiki/Manual:$wgUseInstantCommons)
+- `MW_ADMIN_USER` configures the default administrator username
+- `MW_ADMIN_PASS` configures the default administrator password
+- `MW_DB_NAME` specifies the database name that will be created automatically upon container startup
+- `MW_DB_USER` specifies the database user for access to the database specified in `MW_DB_NAME`
+- `MW_DB_PASS` specifies the database user password
+- `MW_DB_INSTALLDB_USER` specifies the database superuser name for create database and user specified above
+- `MW_DB_INSTALLDB_PASS` specifies the database superuser password; should be the same as `MYSQL_ROOT_PASSWORD` in db section.
+- `MW_PROXY_SERVERS` (comma separated values) configures [$wgSquidServers](https://www.mediawiki.org/wiki/Manual:$wgSquidServers). Leave empty if no reverse proxy server used.
+- `MW_MAIN_CACHE_TYPE` configures [$wgMainCacheType](https://www.mediawiki.org/wiki/Manual:$wgMainCacheType). `MW_MEMCACHED_SERVERS` should be provided for `CACHE_MEMCACHED`.
+- `MW_MEMCACHED_SERVERS` (comma separated values) configures [$wgMemCachedServers](https://www.mediawiki.org/wiki/Manual:$wgMemCachedServers).
+- `MW_AUTOUPDATE` if `true` (by default), run needed maintenance scripts automatically before web server start.
+- `MW_SHOW_EXCEPTION_DETAILS` if `true` (by default) configures [$wgShowExceptionDetails](https://www.mediawiki.org/wiki/Manual:$wgShowExceptionDetails) as true.
+- `PHP_LOG_ERRORS` specifies `log_errors` parameter in `php.ini` file.
+- `PHP_ERROR_REPORTING` specifies `error_reporting` parameter in `php.ini` file. `E_ALL` by default, on production should be changed to `E_ALL & ~E_DEPRECATED & ~E_STRICT`.
+
+# Settings
+
+The stack will load all the settings files from the `_settings` directory
+and will append each file to the bottom of the original `LocalSettings.php`
+of the MediaWiki inside the container
+
+# Mounting files into the containers
+
+In order to mount some files, like a logo, just use `volumes` section
+on the `docker-compose.yml`, you can expand the section using Compose
+overrides, eg: to add a custom logo
+
+* Create `_resources` directory and out your logo there (`_resources/logo.png`)
+* Create `docker-compose.override.yml` file
+* Expand the `web` volumes section by adding the following lines:
+
+```yml
+
+```
