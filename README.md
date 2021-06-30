@@ -26,12 +26,15 @@ how it could be done with the original `docker-compose`, eg:
 
 # Composition
 
-The stack is composed of the following container:
+The stack is composed of the following containers:
 
+Required:
 - `db` - MySQL, a database backend for MediaWiki.
 - `web` - Apache/MediaWiki container with PHP on the board
-- `redis` - Redis cache
-- `elasticsearch` - ElasticSearch instance
+
+Optional, can be enabled via compose-extension:
+- `redis` - Redis cache ( see `docker-compose/redis.yml.example` )
+- `elasticsearch` - ElasticSearch instance ( see `docker-compose/elasticsearch.yml.example` )
 
 # Configuration
 
@@ -66,11 +69,12 @@ see `.env.example` for a list of variables
 The stack will optionally load a settings file from the `_settings/LocalSettings.php`
 and will append it to the bottom of the original `LocalSettings.php` of the container.
 
-# Modifying the `docker-compose.yml`
+# Extending the `docker-compose.yml`
 
 The proper way to make modifications or additions to the orignal
 `docker-compose.yml` is to add override-files to the `docker-compose`
-directory, see `logo.yml.example`.
+directory, see `logo.yml.example`. Only files with `.yml` extension
+are loaded.
 
 This is based on the [Compose extends](https://docs.docker.com/compose/extends/)
 feature.
