@@ -47,20 +47,32 @@ see `.env.example` for a list of variables
 
 # Settings
 
-The stack will load all the settings files from the `_settings` directory
+The stack will load all the PHP settings files from the `_settings` directory
 and will append each file to the bottom of the original `LocalSettings.php`
-of the MediaWiki inside the container
+of the MediaWiki inside the container.
 
-# Mounting files into the containers
+In order to supply the wiki with some custom settings just create a 
+`LocalSettings.php` file inside the `_settings` directory. The file name is
+not important.
 
-In order to mount some files, like a logo, just use `volumes` section
-on the `docker-compose.yml`, you can expand the section using Compose
-overrides, eg: to add a custom logo
+# Modifying the `docker-compose.yml`
 
-* Create `_resources` directory and out your logo there (`_resources/logo.png`)
-* Create `docker-compose.override.yml` file
+In order to modify the stack eg. to mount some files, like a logo,
+just use `volumes` section on the `docker-compose.yml` by expanding
+the section using [Compose extends](https://docs.docker.com/compose/extends/),
+eg: to add a custom logo
+
+* Create `_resources` directory and put your logo there (`_resources/logo.png`)
+* Create `docker-compose.override.yml` file at root
 * Expand the `web` volumes section by adding the following lines:
 
 ```yml
+version: '3.1'
+services:
+  web:
+    volumes:
+      - ./_resources/logo.png:/var/www/html/w/logo.png
 
 ```
+
+* And run or re-create the stack via `docker-compose up -d`
