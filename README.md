@@ -116,6 +116,9 @@ services:
 
 * And run or re-create the stack via `./compose up -d`
 
+Please refer to the https://docs.docker.com/compose/extends/#adding-and-overriding-configuration
+for details about `docker-compose.yml` overriding specifics.
+
 ## Upgrading
 
 Pull the latest image, stop, rebuild and start containers:
