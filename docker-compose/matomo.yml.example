@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+    matomo:
+        image: matomo
+        restart: unless-stopped
+        links:
+            - db
+        ports:
+            - "8182:80"
+        environment:
+            - MATOMO_DATABASE_HOST=db
+            - MATOMO_DATABASE_DBNAME=matomo
+            - MATOMO_DATABASE_USERNAME=root
+            - MATOMO_DATABASE_PASSWORD=$MW_DB_INSTALLDB_PASS
+        volumes:
+            - ./_data/matomo:/var/www/html
