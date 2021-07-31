@@ -56,6 +56,7 @@ services:
       - MW_CIRRUS_SEARCH_SERVERS
       - PHP_UPLOAD_MAX_FILESIZE=500M
       - PHP_POST_MAX_SIZE=500M
+      - MW_DEBUG_MODE
     volumes:
       - ./_data/mediawiki:/mediawiki
       - ./_logs/httpd:/var/log/httpd
