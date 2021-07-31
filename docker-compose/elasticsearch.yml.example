@@ -16,3 +16,6 @@ services:
   web:
     links:
       - elasticsearch
+    environment:
+      - MW_CIRRUS_SEARCH_SERVERS=$(MW_CIRRUS_SEARCH_SERVERS:-elasticsearch)
+      - MW_SEARCH_TYPE=$(MW_SEARCH_TYPE:-CirrusSearch)
