@@ -15,7 +15,7 @@ services:
       - ./_data/mysql:/var/lib/mysql
 
   web:
-    image: ghcr.io/wikiteq/mediawiki:latest
+    image: ghcr.io/wikiteq/mediawiki:1.35.4-20211003-90
     restart: unless-stopped
     ports:
       - "${PORT:-80}:80"

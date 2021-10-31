@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+    watchtower:
+        image: containrrr/watchtower
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - WATCHTOWER_SCOPE=web
+            - WATCHTOWER_POLL_INTERVAL=60
+            - WATCHTOWER_CLEANUP=true
+            - WATCHTOWER_TIMEOUT=60s
+            - WATCHTOWER_ROLLING_RESTART=true
+            - NO_COLOR=true
+        labels:
+            - "com.centurylinklabs.watchtower.scope=web"
+
+	web:
+        labels:
+            - "com.centurylinklabs.watchtower.scope=web"
