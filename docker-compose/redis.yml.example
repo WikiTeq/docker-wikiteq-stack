@@ -9,4 +9,4 @@ services:
     links:
       - redis
     environment:
-      - MW_MAIN_CACHE_TYPE=$(MW_MAIN_CACHE_TYPE:-CACHE_REDIS)
+      - MW_MAIN_CACHE_TYPE=${MW_MAIN_CACHE_TYPE:-CACHE_REDIS}
