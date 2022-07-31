@@ -21,4 +21,4 @@ jobs:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
       - name: Check Batch Runner
-        run: docker compose -f ${{ env.COMPOSE_FILE }} exec db bash -c 'echo Hello, World'
+        run: docker compose -f ${{ env.COMPOSE_FILE }} up
