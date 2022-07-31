@@ -1,0 +1,23 @@
+# see examples/simple-docker-compose.yml/.github/main.yml
+name: Simple Docker Compose
+
+# Controls when the workflow will run
+on:
+  workflow_call:
+    inputs: { }
+    secrets: { }
+env:
+  COMPOSE_FILE: docker-compose.yml
+jobs:
+  simple-docker-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Docker Compose
+        uses: ./
+        with:
+          file: ${{ env.COMPOSE_FILE }}
+          cache-key: simple-docker-compose
+      - name: Check Batch Runner
+        run: docker compose -f ${{ env.COMPOSE_FILE }} exec db bash -c 'echo Hello, World'
