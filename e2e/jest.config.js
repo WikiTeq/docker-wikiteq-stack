@@ -1,6 +1,7 @@
 module.exports = {
-  globalSetup: './setup.js',
-  globalTeardown: './teardown.js',
-  testEnvironment: './puppeteer_environment.js',
+  preset: "jest-puppeteer",
   verbose: true,
+  globals: {
+    URL: process.env.URL || 'http://localhost'
+  }
 }

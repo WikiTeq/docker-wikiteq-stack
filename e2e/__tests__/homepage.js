@@ -1,22 +1,15 @@
+/**
+ * @jest-environment puppeteer
+ */
+
 const timeout = 5000
 
-describe(
-  '/Main_Page',
-  () => {
-    let page
+describe('Google', () => {
     beforeAll(async () => {
-      page = await global.__BROWSER__.newPage()
-      await page.goto('http://localhost')
-    }, timeout)
-
-    afterAll(async () => {
-      await page.close()
+        await page.goto( ( process.env.URL || 'http://localhost' ) )
     })
 
-    it('should load without error', async () => {
-      let text = await page.evaluate(() => document.body.textContent)
-      expect(text).toContain('MediaWiki')
+    it('should display "google" text on page', async () => {
+        await expect(page).toMatch('MediaWiki')
     })
-  },
-  timeout
-)
+})
