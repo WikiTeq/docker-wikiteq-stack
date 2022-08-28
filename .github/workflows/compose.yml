@@ -11,6 +11,9 @@ env:
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
 jobs:
   simple-docker-compose:
+    environment:
+      name: test_environment
+      url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
