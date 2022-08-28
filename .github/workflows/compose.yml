@@ -84,6 +84,15 @@ jobs:
         run: docker-compose logs -f
         shell: bash
 
+      - name: Update deployment status (success)
+        uses: chrnorm/deployment-status@v2
+        if: cancelled()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          state: 'inactive'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
 #      - name: Sleep
 #        run: sleep 3600s
 #        shell: bash
