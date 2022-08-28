@@ -15,7 +15,7 @@ describe(
 
     it('should load without error', async () => {
       let text = await page.evaluate(() => document.body.textContent)
-      expect(text).toContain('mediawiki')
+      expect(text).toContain('MediaWiki')
     })
   },
   timeout
