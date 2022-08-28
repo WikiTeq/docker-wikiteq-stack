@@ -1,7 +1,6 @@
 # see examples/simple-docker-compose.yml/.github/main.yml
 name: Simple Docker Compose
 
-# Controls when the workflow will run
 on:
   pull_request:
   workflow_call:
@@ -20,5 +19,7 @@ jobs:
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
+      - name: Setup env
+        run: cp .env.ci .env
       - name: Check Batch Runner
         run: docker compose -f ${{ env.COMPOSE_FILE }} up
