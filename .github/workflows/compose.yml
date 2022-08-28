@@ -9,6 +9,7 @@ on:
 env:
   COMPOSE_FILE: docker-compose.yml
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+concurrency: docker_compose_ngrok_free
 jobs:
   simple-docker-compose:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
@@ -16,6 +17,18 @@ jobs:
       deployments: write
     runs-on: ubuntu-latest
     steps:
+
+      - name: "Check if user has write access"
+        uses: "lannonbr/repo-permission-check-action@2.0.0"
+        with:
+          permission: "write"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.10.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
