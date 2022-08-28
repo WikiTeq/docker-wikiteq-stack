@@ -38,8 +38,8 @@ jobs:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
 
-      - name: Update server variable in settings
-        run: echo "$wgServer='${{ steps.expose_ngrok.outputs.TUNNEL_URL }}';" >> _settings/LocalSettings.php
+      - name: Give containers a few moments for init
+        run: sleep 30s
         shell: bash
 
       - name: Comment on PR
