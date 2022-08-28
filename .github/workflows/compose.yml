@@ -22,8 +22,8 @@ jobs:
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
-      - name: Check Batch Runner
-        run: docker compose -f ${{ env.COMPOSE_FILE }} up
+#      - name: Check Batch Runner
+#        run: docker compose -f ${{ env.COMPOSE_FILE }} up
       - name: Run establish a ngrok tunnel
         id: expose_ngrok
         uses: wikiteq/ngrok-tunneling-action@master
