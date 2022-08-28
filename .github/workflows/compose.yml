@@ -30,6 +30,10 @@ jobs:
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
 
+      - name: Give ngrok a moment
+        run: sleep 30s
+        shell: bash
+
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
         id: deployment
