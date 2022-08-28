@@ -31,8 +31,22 @@ jobs:
           tunnel_type: http
 
       - name: Give ngrok a moment
-        run: sleep 30s
+        run: sleep 10s
         shell: bash
+
+      - name: Test Ngrok fail
+        if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL == '' }}
+        run: exit 1
+        shell: bash
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.NGROK_TOKEN }}
+          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          state: 'failure'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
