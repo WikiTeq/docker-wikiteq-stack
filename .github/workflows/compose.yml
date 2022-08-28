@@ -30,10 +30,6 @@ jobs:
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
 
-      - name: Give ngrok a moment
-        run: sleep 10s
-        shell: bash
-
       - name: Test Ngrok fail
         if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL == '' }}
         run: exit 1
@@ -44,7 +40,7 @@ jobs:
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ secrets.NGROK_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+#          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -53,7 +49,7 @@ jobs:
         id: deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+#          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
           environment: development
 
       - name: Setup env
@@ -69,8 +65,17 @@ jobs:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
 
+      - name: Update deployment status (success)
+        uses: chrnorm/deployment-status@v2
+        if: success()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
       - name: Give containers a few moments for init
-        run: sleep 30s
+        run: sleep 5s
         shell: bash
 
       - name: Comment on PR
@@ -80,14 +85,6 @@ jobs:
         with:
           message: "Ngrok tunnel is up at: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. It will stay alive for 1 hour, re-trigger the workflow action to re-deploy."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
-          state: 'success'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Sleep
         run: docker-compose logs -f
