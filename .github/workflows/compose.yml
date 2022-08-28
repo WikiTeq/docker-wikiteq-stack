@@ -11,9 +11,11 @@ env:
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
 jobs:
   simple-docker-compose:
-    environment:
-      name: test_environment
-      url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+    permissions:
+      deployments: write
+#    environment:
+#      name: test_environment
+#      url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,6 +29,14 @@ jobs:
           port: 80
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
+
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          environment: development
 
       - name: Setup env
         run: cp .env.ci .env
@@ -52,6 +62,15 @@ jobs:
         with:
           message: "Ngrok tunnel is up at: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. It will stay alive for 1 hour, re-trigger the workflow action to re-deploy."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Sleep
         run: docker-compose logs -f
