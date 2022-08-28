@@ -32,15 +32,15 @@ jobs:
         run: echo "MW_SITE_SERVER=${{ steps.expose_ngrok.outputs.TUNNEL_URL }}" >> .env
         shell: bash
 
-      - name: Update server variable in settings
-        run: echo "$wgServer='${{ steps.expose_ngrok.outputs.TUNNEL_URL }}';" >> _settings/LocalSettings.php
-        shell: bash
-
       - name: Setup Docker Compose
         uses: yu-ichiro/spin-up-docker-compose-action@main
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
+
+      - name: Update server variable in settings
+        run: echo "$wgServer='${{ steps.expose_ngrok.outputs.TUNNEL_URL }}';" >> _settings/LocalSettings.php
+        shell: bash
 
       - name: Comment on PR
         if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' && github.event_name == 'pull_request' }}
