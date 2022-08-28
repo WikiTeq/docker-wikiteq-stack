@@ -34,7 +34,7 @@ jobs:
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
       - name: Comment on PR
-        if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' }} && ${{ github.event_name == 'pull_request' }}
+        if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' && github.event_name == 'pull_request' }}
         uses: mshick/add-pr-comment@v1
         id: comment
         with:
