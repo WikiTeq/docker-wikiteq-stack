@@ -25,11 +25,18 @@ jobs:
 #      - name: Check Batch Runner
 #        run: docker compose -f ${{ env.COMPOSE_FILE }} up
       - name: Run establish a ngrok tunnel
-        id: mediawiki_compose_test
+        id: expose_ngrok
         uses: wikiteq/ngrok-tunneling-action@master
         with:
           timeout: 1h
-          port: 4000
+          port: 80
 #          port: 80
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
+      - name: Comment on PR
+        if: ${{ steps.expose_ngrok.outputs.tunnel-url }} && ${{ github.event_name == 'pull_request' }}
+        uses: mshick/add-pr-comment@v1
+        id: comment
+        with:
+          message: "Ngrok tunnel is up at: `${{ steps.expose_ngrok.outputs.tunnel-url }}`"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
