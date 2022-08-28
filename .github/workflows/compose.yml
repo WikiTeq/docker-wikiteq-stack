@@ -96,9 +96,17 @@ jobs:
 #          message: "Deployed to ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. Stay-alive time is 1 hour, re-run the action to re-deploy."
 #          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sleep
-        run: docker-compose logs -f
-        shell: bash
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm i
+        working-directory: e2e
+      - run: npm test
+        working-directory: e2e
+
+#      - name: Sleep
+#        run: docker-compose logs -f
+#        shell: bash
 
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2
@@ -111,3 +119,11 @@ jobs:
 #      - name: Sleep
 #        run: sleep 3600s
 #        shell: bash
+
+      - name: Update deployment status (success)
+        uses: chrnorm/deployment-status@v2
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          state: 'inactive'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
