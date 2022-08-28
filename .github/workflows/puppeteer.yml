@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm i
+      - run: yarn i
         working-directory: e2e
-      - run: npm test
+      - run: yarn test
         working-directory: e2e
