@@ -33,6 +33,9 @@ jobs:
 #          port: 80
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
           tunnel_type: http
+      - name: Test action output
+        run: echo ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+        shell: bash
       - name: Comment on PR
         if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' && github.event_name == 'pull_request' }}
         uses: mshick/add-pr-comment@v1
