@@ -1,5 +1,4 @@
-# see  examples/simple-docker-compose.yml/.github/main.yml
-name: Simple Docker Compose
+name: DeployerBot
 
 on:
   pull_request:
@@ -63,6 +62,10 @@ jobs:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
 
+      - name: Give containers a moment to init
+        run: sleep 30s
+        shell: bash
+
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2
         if: success()
@@ -89,7 +92,6 @@ jobs:
         if: cancelled() || failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
           state: 'inactive'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
