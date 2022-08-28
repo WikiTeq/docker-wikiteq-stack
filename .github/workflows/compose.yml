@@ -40,7 +40,7 @@ jobs:
         uses: mshick/add-pr-comment@v1
         id: comment
         with:
-          message: "Ngrok tunnel is up at: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }} , it will stay alive for 1 hour"
+          message: "Ngrok tunnel is up at: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. It will stay alive for 1 hour, re-trigger the workflow action to re-deploy."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Sleep
         run: sleep 3600s
