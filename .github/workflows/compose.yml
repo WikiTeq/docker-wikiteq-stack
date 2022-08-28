@@ -15,13 +15,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup env
+        run: cp .env.ci .env
       - name: Setup Docker Compose
         uses: yu-ichiro/spin-up-docker-compose-action@main
         with:
           file: ${{ env.COMPOSE_FILE }}
           cache-key: simple-docker-compose
-      - name: Setup env
-        run: cp .env.ci .env
 #      - name: Check Batch Runner
 #        run: docker compose -f ${{ env.COMPOSE_FILE }} up
       - name: Run establish a ngrok tunnel
