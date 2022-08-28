@@ -6,7 +6,7 @@ describe(
     let page
     beforeAll(async () => {
       page = await global.__BROWSER__.newPage()
-      await page.goto('https://google.com')
+      await page.goto('http://localhost')
     }, timeout)
 
     afterAll(async () => {
@@ -15,7 +15,7 @@ describe(
 
     it('should load without error', async () => {
       let text = await page.evaluate(() => document.body.textContent)
-      expect(text).toContain('google')
+      expect(text).toContain('mediawiki')
     })
   },
   timeout
