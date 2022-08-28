@@ -1,4 +1,4 @@
-# see examples/simple-docker-compose.yml/.github/main.yml
+# see  examples/simple-docker-compose.yml/.github/main.yml
 name: Simple Docker Compose
 
 on:
