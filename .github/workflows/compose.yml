@@ -40,7 +40,6 @@ jobs:
         uses: chrnorm/deployment-status@v2
         with:
           token: ${{ secrets.NGROK_TOKEN }}
-#          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -49,7 +48,6 @@ jobs:
         id: deployment
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-#          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
           environment: development
 
       - name: Setup env
@@ -74,16 +72,12 @@ jobs:
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
-      - name: Give containers a few moments for init
-        run: sleep 5s
-        shell: bash
-
       - name: Comment on PR
         if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' && github.event_name == 'pull_request' }}
         uses: mshick/add-pr-comment@v1
         id: comment
         with:
-          message: "Ngrok tunnel is up at: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. It will stay alive for 1 hour, re-trigger the workflow action to re-deploy."
+          message: "Deployed to ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. Stay-alive time is 1 hour, re-run the action to re-deploy."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sleep
