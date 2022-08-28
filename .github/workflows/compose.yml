@@ -40,3 +40,6 @@ jobs:
         with:
           message: "Ngrok tunnel is up at: `${{ steps.expose_ngrok.outputs.tunnel-url }}`"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sleep
+        run: sleep 3600s
+        shell: bash
