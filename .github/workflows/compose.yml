@@ -17,6 +17,14 @@ jobs:
       deployments: write
     runs-on: ubuntu-latest
     steps:
+
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: development
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -41,13 +49,6 @@ jobs:
           token: ${{ secrets.NGROK_TOKEN }}
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
-        id: deployment
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment: development
 
       - name: Setup env
         run: cp .env.ci .env
@@ -85,7 +86,7 @@ jobs:
 
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2
-        if: cancelled()
+        if: cancelled() || failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
