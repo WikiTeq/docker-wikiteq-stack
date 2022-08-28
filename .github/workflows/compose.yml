@@ -8,6 +8,7 @@ on:
     secrets: { }
 env:
   COMPOSE_FILE: docker-compose.yml
+  NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
 jobs:
   simple-docker-compose:
     runs-on: ubuntu-latest
@@ -23,3 +24,9 @@ jobs:
         run: cp .env.ci .env
       - name: Check Batch Runner
         run: docker compose -f ${{ env.COMPOSE_FILE }} up
+      - name: Run establish a ngrok tunnel
+        id: mediawiki_compose_test
+        uses: vmactions/ngrok-tunnel@v0.0.1
+        with:
+          protocol: tcp
+          port: 80
