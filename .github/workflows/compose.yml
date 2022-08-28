@@ -11,7 +11,7 @@ env:
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
 jobs:
   simple-docker-compose:
-    if: ${{ github.event.label.name == 'deploy' }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'deploy') }}
     permissions:
       deployments: write
     runs-on: ubuntu-latest
