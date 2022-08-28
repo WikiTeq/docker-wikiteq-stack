@@ -1,12 +1,12 @@
 const timeout = 5000
 
 describe(
-  '/ (Home Page)',
+  '/Special:Version',
   () => {
     let page
     beforeAll(async () => {
       page = await global.__BROWSER__.newPage()
-      await page.goto('https://google.com')
+      await page.goto('http://localhost/wiki/Special:Version')
     }, timeout)
 
     afterAll(async () => {
@@ -15,7 +15,7 @@ describe(
 
     it('should load without error', async () => {
       let text = await page.evaluate(() => document.body.textContent)
-      expect(text).toContain('google')
+      expect(text).toContain('Version')
     })
   },
   timeout
