@@ -26,9 +26,11 @@ jobs:
 #        run: docker compose -f ${{ env.COMPOSE_FILE }} up
       - name: Run establish a ngrok tunnel
         id: mediawiki_compose_test
-        uses: apogiatzis/ngrok-tunneling-action@master
+        uses: luisboto/ngrok-tunnel-action@master
         with:
           timeout: 1h
           port: 22
 #          port: 80
           ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
+          tunnel_type: tcp
+          save_url_to_filename: tunnelURL.md
