@@ -63,6 +63,17 @@ jobs:
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
+      - uses: codetalkio/expose-tunnel@v1.4.0
+        id: expose_ngrok
+        with:
+          service: localhost.run
+          port: 80
+
+      - name: Test Ngrok fail
+        if: ${{ steps.expose_ngrok.outputs.tunnel-url == '' }}
+        run: exit 1
+        shell: bash
+
       - name: Setup env
         run: cp .env.ci .env
 
@@ -80,12 +91,6 @@ jobs:
         run: sleep 30s
         shell: bash
 
-      - uses: codetalkio/expose-tunnel@v1.4.0
-        id: expose_ngrok
-        with:
-          service: localhost.run
-          port: 80
-
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2.0.1
         if: success()
@@ -102,11 +107,6 @@ jobs:
         with:
           message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Test Ngrok fail
-        if: ${{ steps.expose_ngrok.outputs.tunnel-url == '' }}
-        run: exit 1
-        shell: bash
 
       - name: Sleep
         run: docker-compose logs -f
