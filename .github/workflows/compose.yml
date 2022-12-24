@@ -46,17 +46,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Run establish a ngrok tunnel
+#      - name: Run establish a ngrok tunnel
+#        id: expose_ngrok
+#        uses: wikiteq/ngrok-tunneling-action@master
+#        with:
+#          timeout: 1h
+#          port: 80
+#          ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
+#          tunnel_type: http
+
+      - uses: codetalkio/expose-tunnel@v1.4.0
         id: expose_ngrok
-        uses: wikiteq/ngrok-tunneling-action@master
         with:
-          timeout: 1h
+          service: bore.pub
           port: 80
-          ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
-          tunnel_type: http
 
       - name: Test Ngrok fail
-        if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL == '' }}
+        if: ${{ steps.expose_ngrok.outputs.tunnel-url == '' }}
         run: exit 1
         shell: bash
 
@@ -72,7 +78,7 @@ jobs:
         run: cp .env.ci .env
 
       - name: Update server variable
-        run: echo "MW_SITE_SERVER=${{ steps.expose_ngrok.outputs.TUNNEL_URL }}" >> .env
+        run: echo "MW_SITE_SERVER=${{ steps.expose_ngrok.outputs.tunnel-url }}" >> .env
         shell: bash
 
       - name: Setup Docker Compose
@@ -90,21 +96,21 @@ jobs:
         if: success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}
+          environment-url: ${{ steps.expose_ngrok.outputs.tunnel-url }}
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Comment on PR
-        if: ${{ steps.expose_ngrok.outputs.TUNNEL_URL != '' && github.event_name == 'pull_request' }}
+        if: ${{ steps.expose_ngrok.outputs.tunnel-url != '' && github.event_name == 'pull_request' }}
         uses: mshick/add-pr-comment@v2
         id: comment
         with:
-          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
+          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Sleep
-        run: docker-compose logs -f
-        shell: bash
+#      - name: Sleep
+#        run: docker-compose logs -f
+#        shell: bash
 
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@v2.0.1
