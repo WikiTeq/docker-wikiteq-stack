@@ -108,6 +108,7 @@ jobs:
         with:
           message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          allow-repeats: true
 
       - name: Sleep
         run: docker-compose logs -f
