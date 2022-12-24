@@ -10,6 +10,7 @@ on:
 env:
   COMPOSE_FILE: docker-compose.yml
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+  BORE_TOKEN: ${{ secrets.BORE_TOKEN }}
 #concurrency: docker_compose_ngrok_free
 jobs:
   simple-docker-compose:
@@ -68,8 +69,11 @@ jobs:
         id: expose_ngrok
         with:
 #          service: localhost.run
-          service: bore.pub
+#          service: bore.pub
+          service: bore.selfhosted
           port: 80
+          selfHostedEndpoint: 209.182.255.172
+          secret: ${{ secrets.BORE_TOKEN }}
 
       - name: Test Ngrok fail
         if: ${{ steps.expose_ngrok.outputs.tunnel-url == '' }}
@@ -107,7 +111,7 @@ jobs:
         uses: mshick/add-pr-comment@v2
         id: comment
         with:
-          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue running until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
+          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, new commits deployed automatically. The action will continue running until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           allow-repeats: true
 
