@@ -25,11 +25,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.10.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: chrnorm/deployment-action@v2
+      - uses: chrnorm/deployment-action@v2.0.5
         name: Create GitHub deployment
         id: deployment
         with:
@@ -55,7 +55,7 @@ jobs:
 
       - name: Update deployment status (failure)
         if: failure()
-        uses: chrnorm/deployment-status@v2
+        uses: chrnorm/deployment-status@v2.0.5
         with:
           token: ${{ secrets.NGROK_TOKEN }}
           state: 'failure'
@@ -79,7 +79,7 @@ jobs:
         shell: bash
 
       - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2
+        uses: chrnorm/deployment-status@v2.0.5
         if: success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
         shell: bash
 
       - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2
+        uses: chrnorm/deployment-status@v2.0.5
         if: cancelled() || failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
