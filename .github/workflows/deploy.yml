@@ -27,14 +27,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Cancel Previous Runs
+#        uses: styfle/cancel-workflow-action@0.11.0
+#        with:
+#          access_token: ${{ secrets.GITHUB_TOKEN }}
+#          workflow_id: DeployerBot,deploy,deploy.yml
 
-      - name: Sleep after cancel
-        run: sleep 30s
-        shell: bash
+#      - name: Sleep after cancel
+#        run: sleep 30s
+#        shell: bash
 
       - uses: chrnorm/deployment-action@v2.0.5
         name: Create GitHub deployment
