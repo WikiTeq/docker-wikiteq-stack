@@ -32,6 +32,10 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Sleep after cancel
+        run: sleep 30s
+        shell: bash
+
       - uses: chrnorm/deployment-action@v2.0.5
         name: Create GitHub deployment
         id: deployment
