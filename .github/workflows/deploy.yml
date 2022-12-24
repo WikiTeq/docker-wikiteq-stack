@@ -17,14 +17,11 @@ jobs:
       actions: write
     runs-on: ubuntu-latest
     steps:
-      - name: Test
-        run: echo ${{ secrets.BORE_TOKEN }}
-        shell: bash
-#      - name: Deploy and tunnel
-#        uses: wikiteq/compose-deploy-tunnel-action@master
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          secret: ${{ secrets.BORE_TOKEN }}
-#          endpoint: stage-deploy.wikiteq.com
-#          port: 80
-#          file: docker-compose.yml
+      - name: Deploy and tunnel
+        uses: wikiteq/compose-deploy-tunnel-action@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          secret: ${{ secrets.BORE_TOKEN }}
+          endpoint: stage-deploy.wikiteq.com
+          port: 80
+          file: docker-compose.yml
