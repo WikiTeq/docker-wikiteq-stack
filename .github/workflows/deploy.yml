@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy and tunnel
-        uses: wikiteq/compose-deploy-tunnel-action@v1
+        uses: wikiteq/compose-deploy-tunnel-action@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           secret: ${{ secrets.BORE_TOKEN }}
