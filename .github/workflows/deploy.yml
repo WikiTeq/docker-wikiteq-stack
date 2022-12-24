@@ -7,9 +7,6 @@ on:
   workflow_call:
     inputs: {}
     secrets: {}
-env:
-  COMPOSE_FILE: docker-compose.yml
-  BORE_TOKEN: ${{ secrets.BORE_TOKEN }}
 #concurrency: docker_compose_ngrok_free
 jobs:
   deploy-tunnel:
@@ -20,103 +17,11 @@ jobs:
       actions: write
     runs-on: ubuntu-latest
     steps:
-      - name: Check for secrets
-        if: env.BORE_TOKEN == '' || env.BORE_TOKEN == null
-        run: echo 'BORE_TOKEN secret is missing' && exit 1
-
-      - name: Check if user has write access
-        uses: lannonbr/repo-permission-check-action@2.0.2
-        with:
-          permission: "write"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-          workflow_id: DeployerBot,deploy,deploy.yml
-
-      - name: Sleep after cancel
-        run: sleep 30s
-        shell: bash
-
-      - uses: chrnorm/deployment-action@v2.0.5
-        name: Create GitHub deployment
-        id: deployment
+      - name: Deploy and tunnel
+        uses: wikiteq/compose-deploy-tunnel-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          environment: development
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: chrnorm/deployment-status@v2.0.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          state: 'failure'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-      - uses: codetalkio/expose-tunnel@v1.4.0
-        id: expose_ngrok
-        with:
-#          service: localhost.run
-#          service: bore.pub
-          service: bore.selfhosted
-          port: 80
-          selfHostedEndpoint: stage-deploy.wikiteq.com
           secret: ${{ secrets.BORE_TOKEN }}
-
-      - name: Test Ngrok fail
-        if: ${{ steps.expose_ngrok.outputs.tunnel-url == '' }}
-        run: exit 1
-        shell: bash
-
-      - name: Setup env
-        run: cp .env.ci .env
-
-      - name: Update server variable
-        run: echo "MW_SITE_SERVER=${{ steps.expose_ngrok.outputs.tunnel-url }}" >> .env
-        shell: bash
-
-      - name: Setup Docker Compose
-        uses: yu-ichiro/spin-up-docker-compose-action@main
-        with:
-          file: ${{ env.COMPOSE_FILE }}
-          cache-key: simple-docker-compose
-
-      - name: Give containers a moment to init
-        run: sleep 30s
-        shell: bash
-
-      - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2.0.1
-        if: success()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment-url: ${{ steps.expose_ngrok.outputs.tunnel-url }}
-          state: 'success'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-      - name: Comment on PR
-        if: ${{ steps.expose_ngrok.outputs.tunnel-url != '' && github.event_name == 'pull_request' }}
-        uses: mshick/add-pr-comment@v2
-        id: comment
-        with:
-          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.tunnel-url }}. Stay-alive time is 1 hour, new commits deployed automatically. The action will continue running until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          allow-repeats: true
-
-      - name: Sleep
-        run: docker-compose logs -f
-        shell: bash
-
-      - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2.0.1
-        if: cancelled() || failure()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          state: 'inactive'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          endpoint: stage-deploy.wikiteq.com
+          port: 80
+          file: docker-compose.yml
