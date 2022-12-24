@@ -83,7 +83,7 @@ jobs:
       - uses: codetalkio/expose-tunnel@v1.4.0
         id: expose_ngrok
         with:
-          service: bore.pub
+          service: localhost.run
           port: 80
 
       - name: Update deployment status (success)
