@@ -55,7 +55,7 @@ jobs:
 
       - name: Update deployment status (failure)
         if: failure()
-        uses: chrnorm/deployment-status@v2.0.5
+        uses: chrnorm/deployment-status@v2.0.1
         with:
           token: ${{ secrets.NGROK_TOKEN }}
           state: 'failure'
@@ -79,7 +79,7 @@ jobs:
         shell: bash
 
       - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2.0.5
+        uses: chrnorm/deployment-status@v2.0.1
         if: success()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
         shell: bash
 
       - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@v2.0.5
+        uses: chrnorm/deployment-status@v2.0.1
         if: cancelled() || failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
