@@ -9,7 +9,6 @@ on:
     secrets: {}
 env:
   COMPOSE_FILE: docker-compose.yml
-  NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
   BORE_TOKEN: ${{ secrets.BORE_TOKEN }}
 #concurrency: docker_compose_ngrok_free
 jobs:
@@ -21,6 +20,10 @@ jobs:
       actions: write
     runs-on: ubuntu-latest
     steps:
+      - name: Check for secrets
+        if: env.BORE_TOKEN == '' || env.BORE_TOKEN == null
+        run: echo 'BORE_TOKEN secret is missing' && exit 1
+
       - name: Check if user has write access
         uses: lannonbr/repo-permission-check-action@2.0.2
         with:
@@ -28,15 +31,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Cancel Previous Runs
-#        uses: styfle/cancel-workflow-action@0.11.0
-#        with:
-#          access_token: ${{ secrets.GITHUB_TOKEN }}
-#          workflow_id: DeployerBot,deploy,deploy.yml
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+          workflow_id: DeployerBot,deploy,deploy.yml
 
-#      - name: Sleep after cancel
-#        run: sleep 30s
-#        shell: bash
+      - name: Sleep after cancel
+        run: sleep 30s
+        shell: bash
 
       - uses: chrnorm/deployment-action@v2.0.5
         name: Create GitHub deployment
@@ -48,20 +51,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-#      - name: Run establish a ngrok tunnel
-#        id: expose_ngrok
-#        uses: wikiteq/ngrok-tunneling-action@master
-#        with:
-#          timeout: 1h
-#          port: 80
-#          ngrok_authtoken: ${{ secrets.NGROK_TOKEN }}
-#          tunnel_type: http
-
       - name: Update deployment status (failure)
         if: failure()
         uses: chrnorm/deployment-status@v2.0.1
         with:
-          token: ${{ secrets.NGROK_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           state: 'failure'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
@@ -72,7 +66,7 @@ jobs:
 #          service: bore.pub
           service: bore.selfhosted
           port: 80
-          selfHostedEndpoint: 209.182.255.172
+          selfHostedEndpoint: stage-deploy.wikiteq.com
           secret: ${{ secrets.BORE_TOKEN }}
 
       - name: Test Ngrok fail
@@ -126,7 +120,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           state: 'inactive'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-#      - name: Sleep
-#        run: sleep 3600s
-#        shell: bash
