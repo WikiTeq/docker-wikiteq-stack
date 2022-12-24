@@ -40,7 +40,7 @@ services:
       - MW_MAIN_CACHE_TYPE
       - MW_LOAD_SKINS=${MW_LOAD_SKINS:-Vector,chameleon}
       - MW_DEFAULT_SKIN=${MW_DEFAULT_SKIN:-chameleon}
-      - MW_LOAD_EXTENSIONS=${MW_LOAD_EXTENSIONS:-ParserFunctions,WikiEditor,VisualEditor}
+      - MW_LOAD_EXTENSIONS=${MW_LOAD_EXTENSIONS:-ParserFunctions,WikiEditor}
       - MW_ENABLE_EMAIL
       - MW_ENABLE_USER_EMAIL
       - MW_EMERGENCY_CONTACT

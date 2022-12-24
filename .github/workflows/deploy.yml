@@ -12,7 +12,7 @@ env:
   BORE_TOKEN: ${{ secrets.BORE_TOKEN }}
 #concurrency: docker_compose_ngrok_free
 jobs:
-  simple-docker-compose:
+  deploy-tunnel:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
     permissions:
       deployments: write
