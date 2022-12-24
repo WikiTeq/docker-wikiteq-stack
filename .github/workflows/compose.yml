@@ -93,7 +93,7 @@ jobs:
         uses: mshick/add-pr-comment@v2
         id: comment
         with:
-          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remote the `deploy` label from the PR."
+          message: "The PR is deployed to ${{ steps.expose_ngrok.outputs.TUNNEL_URL }}. Stay-alive time is 1 hour, re-run the action to re-deploy. The action will continue to run until timeout or cancelled. To prevent future deployments remove the `deploy` label from the PR."
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sleep
