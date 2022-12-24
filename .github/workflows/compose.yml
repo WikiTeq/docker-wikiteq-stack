@@ -3,7 +3,7 @@ name: DeployerBot
 on:
   pull_request:
 #    types: [ labeled ]
-# test2
+# test3
   workflow_call:
     inputs: {}
     secrets: {}
