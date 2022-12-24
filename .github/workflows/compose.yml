@@ -9,7 +9,7 @@ on:
 env:
   COMPOSE_FILE: docker-compose.yml
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-concurrency: docker_compose_ngrok_free
+#concurrency: docker_compose_ngrok_free
 jobs:
   simple-docker-compose:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
