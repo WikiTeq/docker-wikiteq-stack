@@ -4,8 +4,8 @@ on:
   pull_request:
 #    types: [ labeled ]
   workflow_call:
-    inputs: { }
-    secrets: { }
+    inputs: {}
+    secrets: {}
 env:
   COMPOSE_FILE: docker-compose.yml
   NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
@@ -17,9 +17,8 @@ jobs:
       deployments: write
     runs-on: ubuntu-latest
     steps:
-
-      - name: "Check if user has write access"
-        uses: "lannonbr/repo-permission-check-action@2.0.0"
+      - name: Check if user has write access
+        uses: lannonbr/repo-permission-check-action@2.0.2
         with:
           permission: "write"
         env:
