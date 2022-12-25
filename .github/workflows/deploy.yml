@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo check run ids
-        run: echo "job ids - ${{ steps.fetch.outputs.data }}
+        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}"
 
 #      - name: Confirm check
 #        uses: LouisBrunner/checks-action@v1.1.1
