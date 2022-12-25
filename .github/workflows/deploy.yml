@@ -10,13 +10,13 @@ on:
 jobs:
   deploy-tunnel:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
+    runs-on: ubuntu-latest
     permissions:
       deployments: write
       pull-requests: write
       actions: write
       statuses: write
       checks: write
-    runs-on: ubuntu-latest
     steps:
 
       - name: Fetch check run ids
@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo check run ids
-        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs.*.id) }}"
+        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs[0].id) }}"
 
 #      - name: Confirm check
 #        uses: LouisBrunner/checks-action@v1.1.1
