@@ -18,13 +18,28 @@ jobs:
       checks: write
     runs-on: ubuntu-latest
     steps:
+      -
+      - name: Fetch check run ids
+        id: fetch
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/{repo}/actions/runs/{run_id}/jobs
+          repo: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Echo check run ids
+        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}
+
       - name: Confirm check
         uses: LouisBrunner/checks-action@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          conclusion: 'success'
+          conclusion: 'neutral'
           name: 'deploy-tunnel'
           status: 'completed'
+
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
