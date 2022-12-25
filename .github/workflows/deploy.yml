@@ -17,14 +17,10 @@ jobs:
       statuses: write
     runs-on: ubuntu-latest
     steps:
-      - name: Run the action
-        uses: Sibz/github-status-action@v1
+      - name: Update status
+        uses: ouzi-dev/commit-status-updater@v2
         with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          context: 'DeployerBot'
-          description: 'Passed'
-          state: 'success'
-          sha: ${{github.event.pull_request.head.sha || github.sha}}
+          status: "success"
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
