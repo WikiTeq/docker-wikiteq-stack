@@ -66,3 +66,12 @@ jobs:
           endpoint: stage-deploy.wikiteq.com
           port: 80
           file: docker-compose.yml
+
+      - name: Confirm check
+        uses: LouisBrunner/checks-action@v1.1.1
+        if: cancelled() || failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          conclusion: 'neutral'
+          check_id: ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs[0].id) }}
+          status: 'completed'
