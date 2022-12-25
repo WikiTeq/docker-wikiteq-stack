@@ -23,7 +23,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{github.event.pull_request.head.sha || github.sha}}
           repo: ${{ github.repository }}
-          checks: ${{ GITHUB_ACTION }}
+          checks: ${{ github.action }}
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
