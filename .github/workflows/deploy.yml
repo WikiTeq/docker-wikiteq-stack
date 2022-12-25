@@ -21,6 +21,7 @@ jobs:
         uses: ouzi-dev/commit-status-updater@v2
         with:
           status: "success"
+          name: ${GITHUB_WORKFLOW}
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
