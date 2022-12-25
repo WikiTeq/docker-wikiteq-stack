@@ -23,14 +23,15 @@ jobs:
         id: fetch
         uses: octokit/request-action@v2.x
         with:
-          route: GET /repos/{repo}/actions/runs/{run_id}/jobs
+          route: GET /repos/{repo}/commits/{sha}/check-runs
           repo: ${{ github.repository }}
           run_id: ${{ github.run_id }}
+          sha: ${{github.event.pull_request.head.sha || github.sha}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo check run ids
-        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).jobs.*.id) }}"
+        run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs.*.id) }}"
 
 #      - name: Confirm check
 #        uses: LouisBrunner/checks-action@v1.1.1
