@@ -6,7 +6,7 @@ on:
   workflow_call:
     inputs: {}
     secrets: {}
-#concurrency: docker_compose_ngrok_free
+##concurrency: docker_compose_ngrok_free
 jobs:
   deploy-tunnel:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
