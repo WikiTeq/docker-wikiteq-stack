@@ -15,15 +15,16 @@ jobs:
       pull-requests: write
       actions: write
       statuses: write
+      checks: write
     runs-on: ubuntu-latest
     steps:
       - name: Confirm check
-        uses: maael/confirm-checks-action@main
+        uses: LouisBrunner/checks-action@v1.1.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit: ${{github.event.pull_request.head.sha || github.sha}}
-          repo: ${{ github.repository }}
-          checks: 'deploy-tunnel'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          conclusion: 'success'
+          name: 'deploy-tunnel'
+          status: 'in_progress'
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
