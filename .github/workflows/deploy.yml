@@ -33,19 +33,19 @@ jobs:
       - name: Echo check run ids
         run: echo "job ids - ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs[0].id) }}"
 
-#      - name: Confirm check
-#        uses: LouisBrunner/checks-action@v1.1.1
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          conclusion: 'neutral'
-#          check_id: 'deploy-tunnel'
-#          status: 'completed'
+      - name: Confirm check
+        uses: LouisBrunner/checks-action@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          conclusion: 'success'
+          check_id: ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs[0].id) }}
+          status: 'completed'
 
-#      - name: Deploy and tunnel
-#        uses: wikiteq/compose-deploy-tunnel-action@master
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          secret: ${{ secrets.BORE_TOKEN }}
-#          endpoint: stage-deploy.wikiteq.com
-#          port: 80
-#          file: docker-compose.yml
+      - name: Deploy and tunnel
+        uses: wikiteq/compose-deploy-tunnel-action@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          secret: ${{ secrets.BORE_TOKEN }}
+          endpoint: stage-deploy.wikiteq.com
+          port: 80
+          file: docker-compose.yml
