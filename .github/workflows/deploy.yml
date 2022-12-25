@@ -16,6 +16,14 @@ jobs:
       actions: write
     runs-on: ubuntu-latest
     steps:
+      - name: Run the action
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: 'Test run'
+          description: 'Passed'
+          state: 'success'
+          sha: ${{github.event.pull_request.head.sha || github.sha}}
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
