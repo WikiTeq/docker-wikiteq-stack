@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Confirm check
-        uses: maael/confirm-checks-action@master
+        uses: maael/confirm-checks-action@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit: ${{github.event.pull_request.head.sha || github.sha}}
