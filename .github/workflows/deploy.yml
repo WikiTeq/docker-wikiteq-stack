@@ -2,7 +2,7 @@ name: DeployerBot
 
 on:
   pull_request:
-#    types: [ labeled ]
+    types: [ labeled, synchronize, reopened ]
   workflow_call:
     inputs: {}
     secrets: {}
@@ -69,9 +69,9 @@ jobs:
 
       - name: Confirm check
         uses: LouisBrunner/checks-action@v1.1.1
-        if: cancelled() || failure()
+        if: cancelled()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           conclusion: 'neutral'
           check_id: ${{ toJSON(fromJSON(steps.fetch.outputs.data).check_runs[0].id) }}
-          status: 'completed'
+          status: 'skipped'
