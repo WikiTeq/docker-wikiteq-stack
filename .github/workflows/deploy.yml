@@ -24,7 +24,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           conclusion: 'success'
           name: 'deploy-tunnel'
-          status: 'in_progress'
+          status: 'completed'
       - name: Deploy and tunnel
         uses: wikiteq/compose-deploy-tunnel-action@master
         with:
